@@ -32,10 +32,15 @@ public class NetServerHandlerMixin {
     @Inject(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ChatEmotes;process(Ljava/lang/String;)Ljava/lang/String;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD, remap = false, cancellable = true)
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
         s = ChatEmotes.process(s);
+        StringBuilder ss = new StringBuilder();
         if (s.startsWith(">")) {
-            s = TextFormatting.LIME + s;
+            for (char c : s.toCharArray()) {
+                ss.append(TextFormatting.LIME).append(c).append(TextFormatting.LIME);
+            }
+        } else {
+            ss.append(s);
         }
-        s = "<" + playerEntity.getDisplayName() + TextFormatting.RESET + "> " + TextFormatting.WHITE + s;
+        s = "<" + playerEntity.getDisplayName() + TextFormatting.RESET + "> " + TextFormatting.WHITE + ss;
         logger.info(s);
         mcServer.configManager.sendEncryptedChatToAllPlayers(s);
         ci.cancel();
