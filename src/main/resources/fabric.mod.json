@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "serverchat",
+  "version": "${version}",
+  "name": "ServerChat",
+  "description": "Better server chatting",
+  "authors": [
+    "CalamityCraft"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "online.calamitycraft.serverchat.ServerChatMod"
+    ]
+  },
+  "mixins": [
+      "serverchat.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3"
+  },
+  "suggests": {
+  }
+}

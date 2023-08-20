@@ -1,0 +1,18 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "online.calamitycraft.serverchat.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "EntityPlayerMixin"
+    ],
+    "client": [
+    ],
+    "server": [
+        "NetServerHandlerMixin",
+        "EntityPlayerMPMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
