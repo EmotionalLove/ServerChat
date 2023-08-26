@@ -43,10 +43,10 @@ public class DeathMessageUtil {
                 EntitySlime z = (EntitySlime) killer;
                 return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), "[victim] was drowned inside of a gelatin [killer].");
             }
-            if (killer instanceof EntitySkeleton) { // Shouldn't happen in vanilla/BTA, this implies the Skeleton melee'd the player
+            if (killer instanceof EntitySkeleton) {
                 EntitySkeleton z = (EntitySkeleton) killer;
                 if (ServerChatMod.isHoldingItem(z)) {
-                    return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] was beat by [killer]'s [weapon].");
+                    return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] was shot by [killer]'s [weapon].");
                 } else {
                     return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), "[victim]'s life was ended by [killer].");
                 }
@@ -74,6 +74,13 @@ public class DeathMessageUtil {
             }
             if (killer instanceof EntityPlayerMP) {
                 EntityPlayerMP z = (EntityPlayerMP) killer;
+                if (z.getDisplayName().equals(player.getDisplayName())) {
+                    if (ServerChatMod.isHoldingItem(z)) {
+                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] put themselves out of their misery with [weapon].");
+                    } else {
+                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] put themselves out of their misery");
+                    }
+                }
                 if (ServerChatMod.isHoldingItem(z)) {
                     return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[killer] obliterated [victim] with their [weapon].");
                 } else {

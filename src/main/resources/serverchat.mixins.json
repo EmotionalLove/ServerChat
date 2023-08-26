@@ -1,19 +1,20 @@
 {
-    "required": true,
-    "minVersion": "0.8",
-    "package": "online.calamitycraft.serverchat.mixin",
-    "compatibilityLevel": "JAVA_8",
-    "mixins": [
-        "EntityPlayerMixin"
-    ],
-    "client": [
-    ],
-    "server": [
-        "NetServerHandlerMixin",
-        "EntityPlayerMPMixin",
-        "NetLoginHandlerMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
+  "required": true,
+  "minVersion": "0.8",
+  "package": "online.calamitycraft.serverchat.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EntityPlayerMixin",
+  ],
+  "client": [
+  ],
+  "server": [
+    "EntityPlayerMPMixin",
+    "NetLoginHandlerMixin",
+    "NetServerHandlerMixin",
+    "MinecraftServerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
   }
 }

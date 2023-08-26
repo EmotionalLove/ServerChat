@@ -8,6 +8,7 @@ import net.minecraft.server.entity.player.EntityPlayerMP;
 import net.minecraft.server.net.ChatEmotes;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetServerHandler;
+import online.calamitycraft.serverchat.ServerChatMod;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,6 +46,17 @@ public class NetServerHandlerMixin {
         mcServer.configManager.sendEncryptedChatToAllPlayers(s);
         ci.cancel();
         return;
+    }
+
+    @Redirect(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/handler/NetServerHandler;handleSlashCommand(Ljava/lang/String;)V", ordinal = 0))
+    private void handleSlashCommand(NetServerHandler instance, String e) {
+        try {
+            if (!ServerChatMod.getCommandProcessor().processCommand(this.playerEntity, e)) {
+                this.playerEntity.addChatMessage(TextFormatting.RED + "Bad command.");
+            }
+        } catch (Exception ex) {
+            this.playerEntity.addChatMessage(TextFormatting.RED + "An exception has occurred.");
+        }
     }
 
     @Redirect(method = "handleErrorMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/core/net/packet/Packet;)V", ordinal = 0))
