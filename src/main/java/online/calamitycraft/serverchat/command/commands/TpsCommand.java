@@ -21,7 +21,7 @@ public class TpsCommand extends Command {
         float currentTps = tpsUtil.getTps();
         double avgTps = tpsUtil.getAverageTps();
         player.addChatMessage(TextFormatting.GRAY + "Instantaneous TPS: " + chooseColor(currentTps) + String.format(Locale.US, "%.2f", currentTps));
-        player.addChatMessage(TextFormatting.GRAY + "Average TPS (last 1200 ticks): " + chooseColor(currentTps) + String.format(Locale.US, "%.2f", avgTps));
+        player.addChatMessage(TextFormatting.GRAY + "Average TPS (last 1200 ticks): " + chooseColor(avgTps) + String.format(Locale.US, "%.2f", avgTps));
     }
 
     private TextFormatting chooseColor(double tps) {
