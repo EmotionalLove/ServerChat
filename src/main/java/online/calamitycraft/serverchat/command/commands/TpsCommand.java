@@ -9,14 +9,17 @@ import java.util.Locale;
 
 public class TpsCommand extends Command {
 
-    public TpsCommand() {
+    public static TickrateUtil tpsUtil;
+
+    public TpsCommand(TickrateUtil tpsUtil) {
         super("tps");
+        TpsCommand.tpsUtil = tpsUtil;
     }
 
     @Override
     public void onCommand(EntityPlayerMP player, boolean hasArgs, String[] args) {
-        float currentTps = TickrateUtil.getTps();
-        double avgTps = TickrateUtil.getAverageTps();
+        float currentTps = tpsUtil.getTps();
+        double avgTps = tpsUtil.getAverageTps();
         player.addChatMessage(TextFormatting.GRAY + "Instantaneous TPS: " + chooseColor(currentTps) + String.format(Locale.US, "%.2f", currentTps));
         player.addChatMessage(TextFormatting.GRAY + "Average TPS (last 1200 ticks): " + chooseColor(currentTps) + String.format(Locale.US, "%.2f", avgTps));
     }

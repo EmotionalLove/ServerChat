@@ -1,5 +1,7 @@
 package online.calamitycraft.serverchat.command;
 
+import javax.annotation.Nullable;
+
 public abstract class Command implements ICommand {
 
     private String commandName;
@@ -9,7 +11,7 @@ public abstract class Command implements ICommand {
     }
 
     @Override
-    public final String getCommandName(CommandProcessor processor, boolean withPrefix) {
-        return withPrefix ? processor.commmandPrefix + this.commandName : this.commandName;
+    public final String getCommandName(@Nullable CommandProcessor processor, boolean withPrefix) {
+        return (withPrefix && processor != null) ? processor.commmandPrefix + this.commandName : this.commandName;
     }
 }
