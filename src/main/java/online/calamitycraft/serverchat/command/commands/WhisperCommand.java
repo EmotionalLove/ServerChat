@@ -1,10 +1,13 @@
 package online.calamitycraft.serverchat.command.commands;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.entity.player.EntityPlayerMP;
+import online.calamitycraft.serverchat.ServerChatMod;
 import online.calamitycraft.serverchat.command.Command;
+import online.calamitycraft.serverchat.util.WhisperUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,13 +16,13 @@ import java.util.List;
 public class WhisperCommand extends Command {
 
     public WhisperCommand() {
-        super("w");
+        super("tell", "whisper", "msg", "w", "message");
     }
 
     @Override
     public void onCommand(EntityPlayerMP player, boolean hasArgs, String[] args) {
         if (!hasArgs || args.length < 2) {
-            player.addChatMessage(TextFormatting.RED + "/" + this.getCommandName(null, false) + " [recipient] [message...]");
+            player.addChatMessage(TextFormatting.RED + "/" + this.getCommandNames()[0] + " [recipient] [message...]");
             return;
         }
         String r = args[0];

@@ -1,17 +1,16 @@
 package online.calamitycraft.serverchat;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.entity.EntityLiving;
-import online.calamitycraft.serverchat.command.Command;
 import online.calamitycraft.serverchat.command.CommandProcessor;
 import online.calamitycraft.serverchat.command.commands.*;
 import online.calamitycraft.serverchat.util.TickrateUtil;
-import online.calamitycraft.serverchat.util.YMLParser;
+import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 
 public class ServerChatMod implements ModInitializer {
     public static final String MOD_ID = "serverchat";
@@ -20,6 +19,7 @@ public class ServerChatMod implements ModInitializer {
     public static boolean chatFeatureReady = false;
 
     private static CommandProcessor commandProcessor = new CommandProcessor("/");
+    public static WhisperUtil whisperUtil;
 
     @Override
     public void onInitialize() {
@@ -33,11 +33,9 @@ public class ServerChatMod implements ModInitializer {
         if (success || file.isDirectory()) {
             LOGGER.info("Chat feature is ready.");
             commandProcessor.registerCommand(new WhisperCommand());
-            commandProcessor.registerCommand(new WhisperCommand$1());
-            commandProcessor.registerCommand(new WhisperCommand$2());
-            commandProcessor.registerCommand(new WhisperCommand$3());
             chatFeatureReady = true;
         }
+        //whisperUtil = new WhisperUtil(Minecraft.getMinecraft(this));
         LOGGER.info("ServerChat initialized.");
     }
 

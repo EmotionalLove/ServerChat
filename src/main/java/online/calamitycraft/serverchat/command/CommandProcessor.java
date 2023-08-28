@@ -28,8 +28,8 @@ public class CommandProcessor {
             if (commandMatches(command, input)) {
                 boolean hasArgs = false;
                 String[] args = input.split(" ");
-                if (args.length >= 2) {
-                    String commandless = input.replace(command.getCommandName(this, true) + " ", "");
+                if (args.length > 1) {
+                    String commandless = input.substring(input.indexOf(' ') + 1);
                     hasArgs = true;
                     List<String> list = new ArrayList<>();
                     Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(commandless);
@@ -46,8 +46,12 @@ public class CommandProcessor {
     }
 
     private boolean commandMatches(ICommand cmd, String input) {
-        String name = cmd.getCommandName(this, true);
-        return input.equalsIgnoreCase(name) || input.toLowerCase().startsWith(name + " ");
+        for (String name : cmd.getCommandNames()) {
+            if (input.equalsIgnoreCase(this.commmandPrefix + name) || input.toLowerCase().startsWith(this.commmandPrefix + name.toLowerCase() + " "))
+                return true;
+        }
+        return false;
+
     }
 
 }

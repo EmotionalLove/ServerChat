@@ -9,6 +9,7 @@ import net.minecraft.server.net.ChatEmotes;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetServerHandler;
 import online.calamitycraft.serverchat.ServerChatMod;
+import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,8 +19,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.List;
+
 @Mixin(value = NetServerHandler.class, remap = false)
-public class NetServerHandlerMixin {
+public abstract class NetServerHandlerMixin {
 
     @Shadow
     private EntityPlayerMP playerEntity;
@@ -30,18 +33,18 @@ public class NetServerHandlerMixin {
     @Shadow
     private MinecraftServer mcServer;
 
+    @Shadow public abstract void sendPacket(Packet packet);
+
     @Inject(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ChatEmotes;process(Ljava/lang/String;)Ljava/lang/String;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD, remap = false, cancellable = true)
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
         s = ChatEmotes.process(s);
         StringBuilder ss = new StringBuilder();
         if (s.startsWith(">")) {
-            for (char c : s.toCharArray()) {
-                ss.append(TextFormatting.LIME).append(c).append(TextFormatting.LIME);
-            }
+            ss.append(TextFormatting.LIME).append(s);
         } else {
             ss.append(s);
         }
-        s = "<" + playerEntity.getDisplayName() + TextFormatting.RESET + "> " + TextFormatting.WHITE + ss;
+        s = TextFormatting.WHITE + "<" + playerEntity.getDisplayName() + TextFormatting.RESET + "> " + TextFormatting.WHITE + ss;
         logger.info(s);
         mcServer.configManager.sendEncryptedChatToAllPlayers(s);
         ci.cancel();
@@ -56,6 +59,7 @@ public class NetServerHandlerMixin {
             }
         } catch (Exception ex) {
             this.playerEntity.addChatMessage(TextFormatting.RED + "An exception has occurred.");
+            ex.printStackTrace();
         }
     }
 
@@ -74,7 +78,4 @@ public class NetServerHandlerMixin {
         if (i instanceof Packet3Chat) {
         }
     }
-
-
-
 }

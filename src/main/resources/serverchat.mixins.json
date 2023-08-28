@@ -10,10 +10,11 @@
   ],
   "server": [
     "EntityPlayerMPMixin",
+    "MinecraftServerMixin",
     "NetLoginHandlerMixin",
     "NetServerHandlerMixin",
-    "MinecraftServerMixin",
-    "SaveHandlerServerMixin"
+    "SaveHandlerServerMixin",
+    "ServerConfigurationManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
