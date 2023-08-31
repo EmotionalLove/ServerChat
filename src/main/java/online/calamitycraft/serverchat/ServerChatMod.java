@@ -6,6 +6,7 @@ import net.minecraft.core.entity.EntityLiving;
 import online.calamitycraft.serverchat.command.CommandProcessor;
 import online.calamitycraft.serverchat.command.commands.*;
 import online.calamitycraft.serverchat.util.ConfigUtil;
+import online.calamitycraft.serverchat.util.Threads;
 import online.calamitycraft.serverchat.util.TickrateUtil;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class ServerChatMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
+        Threads.init();
         try {
             initConfig();
         } catch (IOException x) {

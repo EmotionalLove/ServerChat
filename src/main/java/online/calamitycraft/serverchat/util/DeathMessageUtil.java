@@ -19,8 +19,10 @@ import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 import online.calamitycraft.serverchat.ServerChatMod;
 
+import java.util.concurrent.Future;
+
 public class DeathMessageUtil {
-    public static String generateDeathMessage(EntityPlayer player, Entity killer) {
+    private static String generateDeathMessage(EntityPlayer player, Entity killer) {
         I18n trans = I18n.getInstance();
         try {
             if (killer instanceof EntityZombie) {
@@ -148,6 +150,10 @@ public class DeathMessageUtil {
             e.printStackTrace();
         }
         return formatDeathMessage(player.getDisplayName(), "[victim] suffered an average British death.");
+    }
+
+    public static Future<String> generateDeathMessageAsync(EntityPlayer player, Entity killer) {
+        return Threads.deathMessageExecutor.submit(() -> generateDeathMessage(player, killer));
     }
 
     public static String formatDeathMessage(String victim, String killer, String weapon, String format) {
