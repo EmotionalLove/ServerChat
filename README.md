@@ -4,7 +4,7 @@ This mod is a server-sided 'plugin' that runs off of Babric (Fabric for Beta Min
 
 This mod also implements playerdata-by-UUID, to keep playerdata consistent across username changes. it will also convert existing legacy playerdata files to UUID based ones if a player without a UUID save joins, and a legacy file can be matched with their name.
 
-
+This branch contains experimental changes that may break your worlds. Unfortunately there's not a lot that can be done with Mixins to fix the awful Server logic in Beta Minecraft. Unless I get on the BTA development team, funny hacks will have to suffice.
 
 ### Work-in-progress!!
 
