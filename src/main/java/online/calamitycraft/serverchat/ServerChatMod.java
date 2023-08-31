@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.entity.EntityLiving;
 import online.calamitycraft.serverchat.command.CommandProcessor;
 import online.calamitycraft.serverchat.command.commands.*;
+import online.calamitycraft.serverchat.threading.TaskManager;
 import online.calamitycraft.serverchat.util.TickrateUtil;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class ServerChatMod implements ModInitializer {
     private static CommandProcessor commandProcessor = new CommandProcessor("/");
     public static WhisperUtil whisperUtil;
 
+    public static TaskManager taskManager;
+
     @Override
     public void onInitialize() {
         commandProcessor.registerCommand(new AboutCommand());
@@ -36,6 +39,7 @@ public class ServerChatMod implements ModInitializer {
             chatFeatureReady = true;
         }
         //whisperUtil = new WhisperUtil(Minecraft.getMinecraft(this));
+        taskManager = new TaskManager();
         LOGGER.info("ServerChat initialized.");
     }
 
