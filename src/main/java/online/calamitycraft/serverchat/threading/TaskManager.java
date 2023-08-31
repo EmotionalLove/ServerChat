@@ -1,14 +1,16 @@
 package online.calamitycraft.serverchat.threading;
 
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TaskManager {
 
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
     private static final Object runLock = new Object();
-    private ArrayList<Task> taskQueue = new ArrayList<>();
+    private final Queue<Task> taskQueue = new ConcurrentLinkedQueue<>();
 
     public TaskManager() {
     }
@@ -23,7 +25,7 @@ public class TaskManager {
         task.async = async;
         lock.lock();
         try {
-            taskQueue.add(task);
+            taskQueue.offer(task);
         } finally {
             lock.unlock();
             synchronized (runLock) {
@@ -70,7 +72,7 @@ public class TaskManager {
                         }
                         continue;
                     }
-                    someTask = taskQueue.get(0);
+                    someTask = taskQueue.peek();
                     if (someTask.async) {
                         new Thread(someTask).start();
                         lock.lock();
