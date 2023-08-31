@@ -39,7 +39,7 @@ public abstract class NetServerHandlerMixin {
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
         s = ChatEmotes.process(s);
         StringBuilder ss = new StringBuilder();
-        if (s.startsWith(">")) {
+        if (s.startsWith(">") && ServerChatMod.config.isGreentextAllowed(true)) {
             ss.append(TextFormatting.LIME).append(s);
         } else {
             ss.append(s);

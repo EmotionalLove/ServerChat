@@ -12,7 +12,7 @@ public class TpsCommand extends Command {
     public static TickrateUtil tpsUtil;
 
     public TpsCommand(TickrateUtil tpsUtil) {
-        super("tps");
+        super("View the server performance", "tps");
         TpsCommand.tpsUtil = tpsUtil;
     }
 
@@ -25,7 +25,7 @@ public class TpsCommand extends Command {
     }
 
     private TextFormatting chooseColor(double tps) {
-        if (tps > 15) return TextFormatting.GREEN;
+        if (tps > 15) return TextFormatting.LIME;
         if (tps > 10) return TextFormatting.YELLOW;
         if (tps > 7) return TextFormatting.ORANGE;
         return TextFormatting.RED;

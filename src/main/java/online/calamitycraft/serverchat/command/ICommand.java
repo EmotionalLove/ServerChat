@@ -6,4 +6,6 @@ public interface ICommand {
     void onCommand(EntityPlayerMP player, boolean hasArgs, String[] args);
 
     String[] getCommandNames();
+
+    String getCommandDescription();
 }

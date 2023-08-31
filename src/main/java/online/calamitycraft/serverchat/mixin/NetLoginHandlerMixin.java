@@ -5,6 +5,7 @@ import net.minecraft.core.net.packet.Packet;
 import net.minecraft.core.net.packet.Packet3Chat;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetLoginHandler;
+import online.calamitycraft.serverchat.ServerChatMod;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,6 +16,7 @@ public class NetLoginHandlerMixin {
     @Redirect(method = "doLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/core/net/packet/Packet;)V", ordinal = 0))
     private void sendPacketToAllPlayers(ServerConfigurationManager instance, Packet i) {
         if (i instanceof Packet3Chat) {
+            if (ServerChatMod.config.allowJoinLeaveMessages(true)) return;
             Packet3Chat message = (Packet3Chat) i;
             String m = message.message.replaceAll("\247.", "");
             String player = m.split("\\ ")[0].trim();

@@ -6,7 +6,7 @@ import online.calamitycraft.serverchat.command.Command;
 public class AboutCommand extends Command {
 
     public AboutCommand() {
-        super("about");
+        super("Test command to be repurposed", "about");
     }
 
     @Override

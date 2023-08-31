@@ -6,7 +6,7 @@ import online.calamitycraft.serverchat.command.Command;
 public class KillCommand extends Command {
 
     public KillCommand() {
-        super("kill");
+        super("Commit suicide" ,"kill");
     }
 
     @Override

@@ -3,6 +3,7 @@ package online.calamitycraft.serverchat.command;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,4 +55,11 @@ public class CommandProcessor {
 
     }
 
+    public String getCommmandPrefix() {
+        return commmandPrefix;
+    }
+
+    public final List<ICommand> getCommandRegistry() {
+        return Collections.unmodifiableList(commandRegistry);
+    }
 }
