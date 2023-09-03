@@ -3,12 +3,14 @@ package online.calamitycraft.serverchat.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.FontRenderer;
 import net.minecraft.core.net.command.TextFormatting;
+import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.core.util.helper.AES;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.entity.player.EntityPlayerMP;
+import online.calamitycraft.serverchat.ServerChatMod;
 import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WhisperUtil {
 
@@ -93,6 +95,39 @@ public class WhisperUtil {
         }
         if (s.length() > wrapPosition) list.add(lastColour + s.substring(wrapPosition));
         return list;
+    }
+
+    public static void sendEncryptedChatToPlayers(EntityPlayerMP sender, String message) {
+        List<EntityPlayerMP> playerEntities = new ArrayList<>(MinecraftServer.getInstance().configManager.playerEntities);
+        ChatFeaturePlayer senderChatFeaturePlayer = ChatFeaturePlayer.chatFeaturePlayerRegistry.get(sender.getDisplayName().toLowerCase());
+        if (senderChatFeaturePlayer == null) {
+            sender.addChatMessage(TextFormatting.RED + "You cannot send messages due to an error.");
+            sender.addChatMessage(TextFormatting.RED + "A re-log may re-enable chat.");
+            return;
+        }
+        if (!senderChatFeaturePlayer.isChatEnabled()) {
+            sender.addChatMessage(TextFormatting.RED + "Your global chat is disabled.");
+            sender.addChatMessage(TextFormatting.RED + "Run /togglechat or /tc to re-enable.");
+            return;
+        }
+        for (EntityPlayerMP playerEntity : MinecraftServer.getInstance().configManager.playerEntities) {
+            if (playerEntity.equals(sender)) continue;
+            ChatFeaturePlayer i = ChatFeaturePlayer.chatFeaturePlayerRegistry.get(playerEntity.getDisplayName().toLowerCase());
+            if (i == null) continue;
+            if (!i.isChatEnabled() || i.isPlayerIgnored(sender)) playerEntities.remove(playerEntity);
+            else if (senderChatFeaturePlayer.isPlayerIgnored(playerEntity)) playerEntities.remove(playerEntity);
+        }
+        if (WhisperUtil.getStringWidth(message)[1] != -1) {
+            List<String> ss = WhisperUtil.slice(message);
+            ss.forEach(split -> sendEncrypted(playerEntities, split.trim()));
+        } else sendEncrypted(playerEntities, message);
+
+    }
+
+    public static void sendEncrypted(List<EntityPlayerMP> playerList, String message) {
+        for (EntityPlayerMP entityplayermp : playerList) {
+            entityplayermp.playerNetServerHandler.sendPacket(new Packet3Chat(message, AES.keyChain.get(entityplayermp.username)));
+        }
     }
 
 }

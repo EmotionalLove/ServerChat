@@ -84,7 +84,7 @@ public class DeathMessageUtil {
                     }
                 }
                 if (ServerChatMod.isHoldingItem(z)) {
-                    return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[killer] obliterated [victim] with their [weapon].");
+                    return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[killer] obliterated [victim] with [weapon].");
                 } else {
                     return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] was beat to death by [killer].");
                 }
@@ -96,7 +96,7 @@ public class DeathMessageUtil {
                     EntityLiving z = ((EntityArrowGolden) killer).owner;
                     if (z.getDisplayName().equals(player.username)) {
                         if (ServerChatMod.isHoldingItem(player)) {
-                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), trans.translateKey(player.getHeldItem().getItemTranslateKey()), "[victim] shot themselves with their [weapon]."); // suicide with named item
+                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), trans.translateKey(player.getHeldItem().getItemTranslateKey()), "[victim] shot themselves with [weapon]."); // suicide with named item
                         }
                         return formatDeathMessage(player.getDisplayName(), "[victim] shot themselves."); // suicide
                     }

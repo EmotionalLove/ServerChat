@@ -45,7 +45,7 @@ public class EntityPlayerMPMixin {
         new Thread(() -> {
             while (!stringFuture.isDone());
             try {
-                this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(stringFuture.get()));
+                WhisperUtil.sendEncryptedChatToPlayers((EntityPlayerMP) (Object) this, stringFuture.get());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }

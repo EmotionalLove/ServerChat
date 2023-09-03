@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 
+import static online.calamitycraft.serverchat.util.WhisperUtil.sendEncrypted;
+
 @Mixin(value = ServerConfigurationManager.class, remap = false)
 public class ServerConfigurationManagerMixin {
 
@@ -25,16 +27,9 @@ public class ServerConfigurationManagerMixin {
     public void sendEncryptedChatToAllPlayers(String message) {
         if (WhisperUtil.getStringWidth(message)[1] != -1) {
             List<String> ss = WhisperUtil.slice(message);
-            ss.forEach(split -> this.sendEncrypted(split.trim()));
-        } else sendEncrypted(message);
+            ss.forEach(split -> sendEncrypted(this.playerEntities, split.trim()));
+        } else sendEncrypted(playerEntities, message);
 
-    }
-
-    @Unique
-    private void sendEncrypted(String message) {
-        for (EntityPlayerMP entityplayermp : this.playerEntities) {
-            entityplayermp.playerNetServerHandler.sendPacket(new Packet3Chat(message, AES.keyChain.get(entityplayermp.username)));
-        }
     }
 
 }

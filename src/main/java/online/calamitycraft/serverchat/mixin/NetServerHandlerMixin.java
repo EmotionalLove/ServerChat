@@ -33,8 +33,6 @@ public abstract class NetServerHandlerMixin {
     @Shadow
     private MinecraftServer mcServer;
 
-    @Shadow public abstract void sendPacket(Packet packet);
-
     @Inject(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ChatEmotes;process(Ljava/lang/String;)Ljava/lang/String;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD, remap = false, cancellable = true)
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
         s = ChatEmotes.process(s);
@@ -46,9 +44,8 @@ public abstract class NetServerHandlerMixin {
         }
         s = TextFormatting.WHITE + "<" + playerEntity.getDisplayName() + TextFormatting.RESET + "> " + TextFormatting.WHITE + ss;
         logger.info(s);
-        mcServer.configManager.sendEncryptedChatToAllPlayers(s);
+        WhisperUtil.sendEncryptedChatToPlayers(playerEntity, s);
         ci.cancel();
-        return;
     }
 
     @Redirect(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/handler/NetServerHandler;handleSlashCommand(Ljava/lang/String;)V", ordinal = 0))

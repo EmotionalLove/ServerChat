@@ -45,6 +45,11 @@ public class ServerChatMod implements ModInitializer {
         if (success || file.isDirectory()) {
             LOGGER.info("Chat feature is ready.");
             commandProcessor.registerCommand(new WhisperCommand());
+            commandProcessor.registerCommand(new ReplyCommand());
+            commandProcessor.registerCommand(new LastCommand());
+            commandProcessor.registerCommand(new IgnoreCommand());
+            commandProcessor.registerCommand(new IgnoreListCommand());
+            commandProcessor.registerCommand(new ToggleChatCommand());
             chatFeatureReady = true;
         }
         //whisperUtil = new WhisperUtil(Minecraft.getMinecraft(this));
