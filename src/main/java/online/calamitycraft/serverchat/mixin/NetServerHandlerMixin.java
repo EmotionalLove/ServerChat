@@ -1,7 +1,9 @@
 package online.calamitycraft.serverchat.mixin;
 
+import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.net.packet.Packet;
+import net.minecraft.core.net.packet.Packet134ItemData;
 import net.minecraft.core.net.packet.Packet3Chat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.entity.player.EntityPlayerMP;
@@ -12,14 +14,18 @@ import online.calamitycraft.serverchat.ServerChatMod;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(value = NetServerHandler.class, remap = false)
 public abstract class NetServerHandlerMixin {
@@ -32,6 +38,9 @@ public abstract class NetServerHandlerMixin {
 
     @Shadow
     private MinecraftServer mcServer;
+
+    @Shadow
+    public abstract void kickPlayer(String s);
 
     @Inject(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ChatEmotes;process(Ljava/lang/String;)Ljava/lang/String;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD, remap = false, cancellable = true)
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
@@ -74,5 +83,35 @@ public abstract class NetServerHandlerMixin {
     private void sendPacketToAllPlayers$1(ServerConfigurationManager instance, Packet i) {
         if (i instanceof Packet3Chat) {
         }
+    }
+
+    @Inject(method = "handleItemData", at = @At("HEAD"), cancellable = true)
+    private void handleItemData(Packet134ItemData packet, CallbackInfo ci) {
+        boolean isLabel = this.playerEntity.inventory.getStackInSlot(packet.slot).itemID == 16518; // ensure the requested slot is a label
+        boolean flag = validateCompoundTag(packet.tag); // ensure the compoundtag only has the four permitted keys in it
+        if (!isLabel || !flag) {
+            this.kickPlayer(TextFormatting.ORANGE + "You have been disconnected from the server");
+            ci.cancel();
+        }
+    }
+
+    @Unique
+    private boolean validateCompoundTag(CompoundTag tag) {
+        for (String s : tag.getValue().keySet()) {
+            if (s.equals("overrideName")) {
+                continue;
+            }
+            if (s.equals("overrideColor")) {
+                continue;
+            }
+            if (s.equals("name")) {
+                continue;
+            }
+            if (s.equals("color")) {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }
