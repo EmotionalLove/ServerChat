@@ -4,6 +4,7 @@
   "package": "online.calamitycraft.serverchat.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "EntityItemMixin",
     "EntityPlayerMixin"
   ],
   "client": [
