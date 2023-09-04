@@ -105,6 +105,16 @@ public abstract class NetServerHandlerMixin {
                 continue;
             }
             if (s.equals("name")) {
+                String potentialName = tag.getStringOrDefault("name", null);
+                if (potentialName == null) return false; // vanilla bta client does not send empty or null strings.
+                potentialName = potentialName.replace("\247", "$"); // We don't want section symbols in our custom names.
+                if (potentialName.length() != potentialName.getBytes().length) {
+                    // Contains unicode characters. Disallow this due to possible exploits
+                    // Implement proper sanitization later
+                    // Disallowing unicode may not be an option for non-English servers
+                    return false;
+                }
+                tag.putString("name", potentialName);
                 continue;
             }
             if (s.equals("color")) {
