@@ -8,17 +8,25 @@ For version 1.7.7_02
 
 ### Work-in-progress!!
 
-## Features:
+## Command features:
+- Disables BTA and vanilla commands (security feature)
+- Disables operator commands (security feature)
+- Disables BTA nicknames and colornames
+- Adds /reply, /last, /ignore, /ignorelist, /togglechat
+- Adds /tps (allow players to view server performance)
+- Adds /kill (allow players to commit suicide)
+
+## Other features:
 - \>tfw can greentext in minecraft
-- Improved death messages
-- Improved join/leave messages
-- Improved private-messaging (/reply, /last, /ignore, /ignorelist, /togglechat)
-- playerdat-by-UUID
-- automatic playerdat conversion for existing playerdat-by-name files
-- /tps command for monitoring server performance, accessible in-game.
-- /kill command for player suicide.
-- automatically generated /help command
+- Revised death messages, more descriptive
+- Simplified join/leave messages, removed player kick announcement
+- Server kick-reason obfuscation
+- kick-reason on server /stop
+- playerdat-by-UUID + automatic legacy playerdat conversion
 - server-sided word-wrap to preserve chat colours on multi-lined messages
+
+## Exploit patches:
+- Validate the contents of Packet134ItemData (Never trust the client!)
 
 
 ## Todo:
@@ -27,4 +35,4 @@ For version 1.7.7_02
 - (additional) configurability
 - server performance improvements, low tps mitigations (entity tick deferring, etc)
 
-https://github.com/Turnip-Labs/babric-instance-repo/releases/tag/v1.7.7.0_01 run the server "babric/fabric" JAR and use `./gradlew build` in this repo to generate a JAR file, which you will place in the `mods` folder of your fabric/babric server directory.
+https://github.com/Turnip-Labs/babric-instance-repo/releases/tag/v1.7.7.0_02 run the server "babric/fabric" JAR and use `./gradlew build` in this repo to generate a JAR file, which you will place in the `mods` folder of your fabric/babric server directory.

@@ -13,6 +13,7 @@ import net.minecraft.core.entity.projectile.EntityArrow;
 import net.minecraft.core.entity.projectile.EntityArrowGolden;
 import net.minecraft.core.entity.projectile.EntityCannonball;
 import net.minecraft.core.entity.projectile.EntityFireball;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.lang.I18n;
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.util.helper.MathHelper;
@@ -32,7 +33,9 @@ public class DeathMessageUtil {
                 }
                 EntityZombie z = (EntityZombie) killer;
                 if (ServerChatMod.isHoldingItem(z)) {
-                    return formatDeathMessage(player.getDisplayName(), name, trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] fell victim to [killer]'s [weapon].");
+                    ItemStack heldStack = z.getHeldItem();
+                    String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                    return formatDeathMessage(player.getDisplayName(), name, heldName, "[victim] fell victim to [killer]'s [weapon].");
                 } else {
                     return formatDeathMessage(player.getDisplayName(), name, "[victim]'s life was ended by [killer].");
                 }
@@ -48,7 +51,9 @@ public class DeathMessageUtil {
             if (killer instanceof EntitySkeleton) {
                 EntitySkeleton z = (EntitySkeleton) killer;
                 if (ServerChatMod.isHoldingItem(z)) {
-                    return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] was shot by [killer]'s [weapon].");
+                    ItemStack heldStack = z.getHeldItem();
+                    String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                    return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), heldName, "[victim] was shot by [killer]'s [weapon].");
                 } else {
                     return formatDeathMessage(player.getDisplayName(), killer.getClass().getSimpleName().replace("Entity", ""), "[victim]'s life was ended by [killer].");
                 }
@@ -78,13 +83,17 @@ public class DeathMessageUtil {
                 EntityPlayerMP z = (EntityPlayerMP) killer;
                 if (z.getDisplayName().equals(player.getDisplayName())) {
                     if (ServerChatMod.isHoldingItem(z)) {
-                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] put themselves out of their misery with [weapon].");
+                        ItemStack heldStack = z.getHeldItem();
+                        String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), heldName, "[victim] put themselves out of their misery with [weapon].");
                     } else {
                         return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] put themselves out of their misery");
                     }
                 }
                 if (ServerChatMod.isHoldingItem(z)) {
-                    return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[killer] obliterated [victim] with [weapon].");
+                    ItemStack heldStack = z.getHeldItem();
+                    String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                    return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), heldName, "[killer] obliterated [victim] with [weapon].");
                 } else {
                     return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] was beat to death by [killer].");
                 }
@@ -96,12 +105,16 @@ public class DeathMessageUtil {
                     EntityLiving z = ((EntityArrowGolden) killer).owner;
                     if (z.getDisplayName().equals(player.username)) {
                         if (ServerChatMod.isHoldingItem(player)) {
-                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), trans.translateKey(player.getHeldItem().getItemTranslateKey()), "[victim] shot themselves with [weapon]."); // suicide with named item
+                            ItemStack heldStack = z.getHeldItem();
+                            String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), heldName, "[victim] shot themselves with [weapon]."); // suicide with named item
                         }
                         return formatDeathMessage(player.getDisplayName(), "[victim] shot themselves."); // suicide
                     }
                     if (ServerChatMod.isHoldingItem(z)) {
-                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] was shot by [killer]'s [weapon]."); // shot by another player
+                        ItemStack heldStack = z.getHeldItem();
+                        String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), heldName, "[victim] was shot by [killer]'s [weapon]."); // shot by another player
                     }
                     return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] was shot by [killer]."); // shot by another player
 
@@ -114,12 +127,16 @@ public class DeathMessageUtil {
                     EntityLiving z = ((EntityCannonball) killer).owner;
                     if (z.getDisplayName().equals(player.username)) {
                         if (ServerChatMod.isHoldingItem(player)) {
-                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), trans.translateKey(player.getHeldItem().getItemTranslateKey()), "[victim] blew themselves up with [weapon]."); // suicide with named item
+                            ItemStack heldStack = z.getHeldItem();
+                            String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                            return formatDeathMessage(player.getDisplayName(), player.getDisplayName(), heldName, "[victim] blew themselves up with [weapon]."); // suicide with named item
                         }
                         return formatDeathMessage(player.getDisplayName(), "[victim] blew themselves up."); // suicide
                     }
                     if (ServerChatMod.isHoldingItem(z)) {
-                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), trans.translateKey(z.getHeldItem().getItemTranslateKey()), "[victim] was blown up by [killer]'s [weapon]."); // shot by another player
+                        ItemStack heldStack = z.getHeldItem();
+                        String heldName = heldStack.hasCustomName() ? heldStack.getCustomName() : trans.translateKey(heldStack.getItemTranslateKey());
+                        return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), heldName, "[victim] was blown up by [killer]'s [weapon]."); // shot by another player
                     }
                     return formatDeathMessage(player.getDisplayName(), z.getDisplayName(), "[victim] was blown up by [killer]."); // shot by another entity
 

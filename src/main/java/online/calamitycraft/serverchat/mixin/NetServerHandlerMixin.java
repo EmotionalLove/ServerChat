@@ -4,6 +4,7 @@ import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.net.packet.Packet;
 import net.minecraft.core.net.packet.Packet134ItemData;
+import net.minecraft.core.net.packet.Packet255KickDisconnect;
 import net.minecraft.core.net.packet.Packet3Chat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.entity.player.EntityPlayerMP;
@@ -14,7 +15,6 @@ import online.calamitycraft.serverchat.ServerChatMod;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,10 +22,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Mixin(value = NetServerHandler.class, remap = false)
 public abstract class NetServerHandlerMixin {
@@ -82,6 +78,16 @@ public abstract class NetServerHandlerMixin {
     @Redirect(method = "kickPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/core/net/packet/Packet;)V", ordinal = 0))
     private void sendPacketToAllPlayers$1(ServerConfigurationManager instance, Packet i) {
         if (i instanceof Packet3Chat) {
+        }
+    }
+    @Redirect(method = "kickPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/handler/NetServerHandler;sendPacket(Lnet/minecraft/core/net/packet/Packet;)V"))
+    private void sendPacket(NetServerHandler instance, Packet packet) {
+        if ((packet instanceof Packet255KickDisconnect) && ServerChatMod.config.obscureKickReason(true)) {
+            Packet255KickDisconnect pck = (Packet255KickDisconnect) packet;
+            pck.reason = TextFormatting.ORANGE + "You have been disconnected from the server";
+            instance.sendPacket(pck);
+        } else {
+            instance.sendPacket(packet);
         }
     }
 

@@ -17,15 +17,16 @@ public class WhisperUtil {
     private Map<String, String> replyMap = new HashMap<>();
     private Map<String, String> lastMap = new HashMap<>();
 
-    private static final char[] smallChars = new char[]{'l', 'j', ',', '.', '\'', '\"', '[', '{', ']', '}', '!'};
+    private static final char[] smallChars = new char[]{'i', 'l', 'j', ',', '.', '\'', '\"', '[', '{', ']', '}', '!'};
     private final static int largeCharWidth = 14;
-    private final static int normalCharWidth = 11;
+    private final static int normalCharWidth = 12;
     private final static int smallCharWidth = 6;
     public final static int maxWidth = 633;
 
     /**
      * This method will analyse `String s`, and always return an array with a length of 2
      * This method is used to determine whether the given String will fit in the vanilla Minecraft chat UI without wrapping.
+     *
      * @param s The string to be analysed
      * @return [0] will be the length in pixels of the given String, [1] will be the character the String needs to be split at to avoid wrapping.
      */
@@ -57,6 +58,7 @@ public class WhisperUtil {
      * This method will take the given String, and automatically split and preserve Chat Colors.
      * This method will help you avoid client-side word wrapping, which resets the Chat Colors on every line.
      * Splitting a message into multiple lines can help you avoid this.
+     *
      * @param s The string to split
      * @return a list, in order, of the lines you need to send to the player.
      */
@@ -76,6 +78,7 @@ public class WhisperUtil {
                 String col = c + String.valueOf(arr[i + 1]);
                 if (col.matches("§\\S")) {
                     lastColour = col;
+                    i++;
                     continue;
                 }
             }
@@ -87,6 +90,9 @@ public class WhisperUtil {
                 }
             }
             count += flag ? smallCharWidth : normalCharWidth;
+            if (Character.isUpperCase(c)) {
+                count += (largeCharWidth - normalCharWidth);
+            }
             if (count >= maxWidth) {
                 list.add(lastColour + s.substring(wrapPosition, i - 1));
                 wrapPosition = i - 1;
@@ -98,6 +104,7 @@ public class WhisperUtil {
     }
 
     public static void sendEncryptedChatToPlayers(EntityPlayerMP sender, String message) {
+        message = message.trim().replaceAll("\\s+", " ");
         List<EntityPlayerMP> playerEntities = new ArrayList<>(MinecraftServer.getInstance().configManager.playerEntities);
         ChatFeaturePlayer senderChatFeaturePlayer = ChatFeaturePlayer.chatFeaturePlayerRegistry.get(sender.getDisplayName().toLowerCase());
         if (senderChatFeaturePlayer == null) {

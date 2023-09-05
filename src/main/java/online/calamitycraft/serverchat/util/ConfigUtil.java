@@ -14,6 +14,8 @@ public class ConfigUtil {
     {
         configMap.put("allow-greentext", true);
         configMap.put("allow-joinleave-msgs", true);
+        configMap.put("obscure-kick-reason", true);
+        configMap.put("defer-entity-updates", false);
         configMap.put("clump-radius-x", 3);
         configMap.put("clump-radius-y", 2);
         configMap.put("clump-radius-z", 3);
@@ -66,14 +68,20 @@ public class ConfigUtil {
         else return def;
     }
 
+    public boolean obscureKickReason(boolean def) {
+        Object val = configMap.getOrDefault("obscure-kick-reason", def);
+        if (val instanceof Boolean) return (boolean) val;
+        else return def;
+    }
+
+
     public float getClumpX(float def) {
         if (CACHE.isClumpCached()) return CACHE.getClumpX();
         Object val = configMap.getOrDefault("clump-radius-x", def);
         if (val instanceof Number) {
             CACHE.setClumpX(((Number) val).floatValue());
             return ((Number) val).floatValue();
-        }
-        else {
+        } else {
             CACHE.setClumpX(def);
             return def;
         }
@@ -85,8 +93,7 @@ public class ConfigUtil {
         if ((val instanceof Float) || (val instanceof Integer) || (val instanceof Double)) {
             CACHE.setClumpY(((Number) val).floatValue());
             return ((Number) val).floatValue();
-        }
-        else {
+        } else {
             CACHE.setClumpY(def);
             return def;
         }
@@ -98,8 +105,7 @@ public class ConfigUtil {
         if ((val instanceof Float) || (val instanceof Integer) || (val instanceof Double)) {
             CACHE.setClumpZ(((Number) val).floatValue());
             return ((Number) val).floatValue();
-        }
-        else {
+        } else {
             CACHE.setClumpZ(def);
             return def;
         }
