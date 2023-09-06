@@ -2,10 +2,7 @@ package online.calamitycraft.serverchat.mixin;
 
 import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.net.command.TextFormatting;
-import net.minecraft.core.net.packet.Packet;
-import net.minecraft.core.net.packet.Packet134ItemData;
-import net.minecraft.core.net.packet.Packet255KickDisconnect;
-import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.core.net.packet.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 import net.minecraft.server.net.ChatEmotes;
@@ -89,6 +86,13 @@ public abstract class NetServerHandlerMixin {
         } else {
             instance.sendPacket(packet);
         }
+    }
+
+    @Inject(method = "handleRequestChunk", at = @At("HEAD"), cancellable = true)
+    private void handleRequestChunk(Packet56RequestChunk chunk, CallbackInfo ci) {
+        // what does this packet even do?
+        // update: apparently nothing - disable it.
+        ci.cancel();
     }
 
     @Inject(method = "handleItemData", at = @At("HEAD"), cancellable = true)
