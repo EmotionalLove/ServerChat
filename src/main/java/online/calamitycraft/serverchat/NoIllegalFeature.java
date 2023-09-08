@@ -18,6 +18,7 @@ public class NoIllegalFeature implements Listener {
         illegalIdArr = ServerChatMod.config.getIllegalArr(illegalIdArr);
     }
     private final Reactor<?> onBlockPlace = new Reactor<TryBlockPlaceEvent>(event -> {
+        if (event.getTryStack() == null) return;
         for (int i : illegalIdArr) {
             if (event.getTryStack().itemID == i) {
                 event.setCancelled(true);
