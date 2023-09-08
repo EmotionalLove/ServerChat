@@ -16,7 +16,6 @@
     "NetLoginHandlerMixin",
     "NetServerHandlerMixin",
     "SaveHandlerServerMixin",
-    "WorldMixin",
     "ServerConfigurationManagerMixin"
   ],
   "injectors": {
