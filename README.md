@@ -1,8 +1,10 @@
 # ServerChat
 
-This mod is a server-sided 'plugin' that runs off of Babric (Fabric for Beta Minecraft). This mod does not need to be installed on your players clients. This mod is a chat and command management system for basic survival servers that are trying to not to drift too far from the vanilla experience. This mod adds much desired features to build upon Minecraft's already existing chat system.
+This mod is a server-sided 'plugin' that runs off of Babric (Fabric for Beta Minecraft). This mod does not need to be installed on your players clients. This mod is a chat and command management system for basic survival servers that are trying to not drift too far from the vanilla experience. This mod adds much desired features to build upon Minecraft's already existing chat system.
 
 This mod also implements playerdata-by-UUID, to keep playerdata consistent across username changes. it will also convert existing legacy playerdata files to UUID based ones if a player without a UUID save joins, and a legacy file can be matched with their name.
+
+This mod contains **anti-features**, and may not be suitable for your needs. Configuration is currently limited, but intended to be expanded upon in the future. Please read the entire feature lists to ensure this mod is right for you.
 
 For version 1.7.7_02. See `CONFIG.YML` for explanations behind the configuration options.
 
