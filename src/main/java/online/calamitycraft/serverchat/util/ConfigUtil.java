@@ -33,6 +33,7 @@ public class ConfigUtil {
                         Block.portalParadise.id,
                         Block.bed.id,
                         Block.cropsWheat.id});
+        configMap.put("sleep-percent", 50);
     }
 
     public ConfigUtil() throws IOException {
@@ -86,6 +87,13 @@ public class ConfigUtil {
         Object val = configMap.getOrDefault("obscure-kick-reason", def);
         if (val instanceof Boolean) return (boolean) val;
         else return def;
+    }
+
+    public int getSleepPercent(int def) {
+        Object val = configMap.getOrDefault("sleep-percent", def);
+        if (val instanceof Number) {
+            return ((Number) val).intValue();
+        } else return def;
     }
 
 
