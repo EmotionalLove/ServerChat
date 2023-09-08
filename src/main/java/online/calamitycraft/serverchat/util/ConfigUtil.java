@@ -90,6 +90,11 @@ public class ConfigUtil {
         if (val instanceof Boolean) return (boolean) val;
         else return def;
     }
+    public boolean useRandomSpawn(boolean def) {
+        Object val = configMap.getOrDefault("random-spawn", def);
+        if (val instanceof Boolean) return (boolean) val;
+        else return def;
+    }
 
     public int getSleepPercent(int def) {
         Object val = configMap.getOrDefault("sleep-percent", def);

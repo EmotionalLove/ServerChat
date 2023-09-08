@@ -36,6 +36,9 @@ public class EntityPlayerMPMixin {
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/world/World;getSpawnPoint()Lnet/minecraft/core/world/chunk/ChunkCoordinates;"))
     private ChunkCoordinates getSpawnPoint(World instance) {
+        if (instance.dimension.id != 0 || !ServerChatMod.config.useRandomSpawn(true)) {
+            instance.getSpawnPoint();
+        }
         return SpawnUtil.findSuitableSpawnPoint(ServerChatMod.config.getSpawnX(300), ServerChatMod.config.getSpawnZ(300), instance);
     }
 

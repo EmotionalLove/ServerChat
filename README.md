@@ -27,6 +27,7 @@ For version 1.7.7_02. See `CONFIG.YML` for explanations behind the configuration
 - playerdat-by-UUID + automatic legacy playerdat conversion
 - server-sided word-wrap to preserve chat colours on multi-lined messages
 - Enforce maximum stack sizes and remove illegal blocks and items from player inventories, and prevent their use and/or placement (configurable)
+- Randomised spawnpoint (configurable)
 
 ## Exploit patches:
 - Validate the contents of Packet134ItemData (Never trust the client!)
