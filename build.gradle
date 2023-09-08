@@ -89,6 +89,7 @@ dependencies {
 
 	shadow(modImplementation('org.yaml:snakeyaml:2.0'))
 	shadow(modImplementation('com.github.SparklingComet:java-mojang-api:-SNAPSHOT'))
+	shadow(modImplementation('com.github.EmotionalLove:Tinnitus:5f7e31fb13'))
 
 	var log4jVersion = "2.20.0"
 	implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")

@@ -1,6 +1,7 @@
 package online.calamitycraft.serverchat.mixin;
 
 import com.mojang.nbt.CompoundTag;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.net.packet.*;
 import net.minecraft.server.MinecraftServer;
@@ -9,6 +10,7 @@ import net.minecraft.server.net.ChatEmotes;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetServerHandler;
 import online.calamitycraft.serverchat.ServerChatMod;
+import online.calamitycraft.serverchat.event.TryBlockPlaceEvent;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,7 +56,7 @@ public abstract class NetServerHandlerMixin {
     private void handleSlashCommand(NetServerHandler instance, String e) {
         try {
             if (!ServerChatMod.getCommandProcessor().processCommand(this.playerEntity, e)) {
-                this.playerEntity.addChatMessage(TextFormatting.RED + "Bad command.");
+                this.playerEntity.addChatMessage(TextFormatting.RED + "Bad command. Type /help for all commands.");
             }
         } catch (Exception ex) {
             this.playerEntity.addChatMessage(TextFormatting.RED + "An exception has occurred.");
@@ -101,6 +103,16 @@ public abstract class NetServerHandlerMixin {
         boolean flag = validateCompoundTag(packet.tag); // ensure the compoundtag only has the four permitted keys in it
         if (!isLabel || !flag) {
             this.kickPlayer(TextFormatting.ORANGE + "You have been disconnected from the server");
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "handlePlace", at = @At(value = "HEAD"), cancellable = true)
+    public void handlePlace(Packet15Place packet, CallbackInfo ci) {
+        ItemStack stack = playerEntity.inventory.getCurrentItem();
+        TryBlockPlaceEvent event = new TryBlockPlaceEvent(playerEntity, stack);
+        ServerChatMod.getEventManager().invokeEvent(event);
+        if (event.isCancelled()) {
             ci.cancel();
         }
     }

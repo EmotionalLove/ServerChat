@@ -1,5 +1,8 @@
 package online.calamitycraft.serverchat.util;
 
+import net.minecraft.core.block.Block;
+import net.minecraft.core.item.Item;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -19,6 +22,17 @@ public class ConfigUtil {
         configMap.put("clump-radius-x", 3);
         configMap.put("clump-radius-y", 2);
         configMap.put("clump-radius-z", 3);
+        configMap.put("illegal-items", new int[]
+                {Block.bedrock.id, //
+                        Block.fluidWaterFlowing.id,
+                        Block.fluidLavaFlowing.id,
+                        Block.fluidWaterStill.id,
+                        Block.fluidLavaStill.id,
+                        Block.pistonHead.id,
+                        Block.portalNether.id,
+                        Block.portalParadise.id,
+                        Block.bed.id,
+                        Block.cropsWheat.id});
     }
 
     public ConfigUtil() throws IOException {
@@ -111,10 +125,27 @@ public class ConfigUtil {
         }
     }
 
+    public int[] getIllegalArr(int[] def) {
+        if (CACHE.isIllegalArrCached()) return CACHE.getIllegalArr();
+        Object val = configMap.getOrDefault("illegal-items", def);
+        if (val instanceof ArrayList<?>) {
+            ArrayList<?> arrs = (ArrayList<?>) val;
+            int[] arr = new int[arrs.size()];
+            for (int i = 0; i < arrs.size(); i++) {
+                arr[i] = (int) arrs.get(i);
+            }
+            CACHE.setIllegalArr(arr);
+            return arr;
+        } else {
+            return def;
+        }
+    }
+
     public static class Cache {
         private float clumpX = Float.MIN_VALUE;
         private float clumpY = Float.MIN_VALUE;
         private float clumpZ = Float.MIN_VALUE;
+        private int[] illegalArr = new int[]{-1};
 
         protected Cache() {
 
@@ -146,6 +177,18 @@ public class ConfigUtil {
 
         public boolean isClumpCached() {
             return getClumpX() != Float.MIN_VALUE && getClumpY() != Float.MIN_VALUE && getClumpZ() != Float.MIN_VALUE;
+        }
+
+        protected void setIllegalArr(int[] illegalArr) {
+            this.illegalArr = illegalArr;
+        }
+
+        public int[] getIllegalArr() {
+            return illegalArr;
+        }
+
+        public boolean isIllegalArrCached() {
+            return illegalArr[0] != -1;
         }
     }
 

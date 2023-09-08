@@ -2,15 +2,21 @@ package online.calamitycraft.serverchat.mixin;
 
 import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.net.packet.Packet;
+import net.minecraft.core.net.packet.Packet1Login;
 import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.server.entity.player.EntityPlayerMP;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetLoginHandler;
 import online.calamitycraft.serverchat.ServerChatMod;
+import online.calamitycraft.serverchat.event.PlayerJoinServerEvent;
 import online.calamitycraft.serverchat.util.ChatFeaturePlayer;
 import online.calamitycraft.serverchat.util.YMLParser;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +51,12 @@ public class NetLoginHandlerMixin {
             if (!ServerChatMod.config.allowJoinLeaveMessages(true)) return;
             instance.sendPacketToAllPlayers(new Packet3Chat(TextFormatting.GRAY + player + " joined."));
         }
+    }
+
+    @Inject(method = "doLogin", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ServerConfigurationManager;readPlayerDataFromFile(Lnet/minecraft/server/entity/player/EntityPlayerMP;)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    private void doLogin(Packet1Login packet1login, CallbackInfo ci, EntityPlayerMP entityplayermp) {
+        PlayerJoinServerEvent event = new PlayerJoinServerEvent(entityplayermp);
+        ServerChatMod.getEventManager().invokeEvent(event);
     }
 
 }

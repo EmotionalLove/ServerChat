@@ -1,5 +1,6 @@
 package online.calamitycraft.serverchat;
 
+import gaming.femboy.tinnitus.EventManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.entity.EntityLiving;
@@ -23,8 +24,10 @@ public class ServerChatMod implements ModInitializer {
     public static ConfigUtil config;
     public static boolean chatFeatureReady = false;
 
-    private static CommandProcessor commandProcessor = new CommandProcessor("/");
+    private static final CommandProcessor commandProcessor = new CommandProcessor("/");
     public static WhisperUtil whisperUtil;
+
+    private static final EventManager eventManager = new EventManager();
 
     @Override
     public void onInitialize() {
@@ -53,6 +56,11 @@ public class ServerChatMod implements ModInitializer {
             chatFeatureReady = true;
         }
         //whisperUtil = new WhisperUtil(Minecraft.getMinecraft(this));
+
+        if (config.getIllegalArr(new int[]{260}).length > 0) {
+            getEventManager().registerListener(new NoIllegalFeature());
+        }
+
         LOGGER.info("ServerChat initialized.");
     }
 
@@ -66,5 +74,9 @@ public class ServerChatMod implements ModInitializer {
 
     public static CommandProcessor getCommandProcessor() {
         return commandProcessor;
+    }
+
+    public static EventManager getEventManager() {
+        return eventManager;
     }
 }

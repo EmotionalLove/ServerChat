@@ -4,7 +4,7 @@ This mod is a server-sided 'plugin' that runs off of Babric (Fabric for Beta Min
 
 This mod also implements playerdata-by-UUID, to keep playerdata consistent across username changes. it will also convert existing legacy playerdata files to UUID based ones if a player without a UUID save joins, and a legacy file can be matched with their name.
 
-For version 1.7.7_02
+For version 1.7.7_02. See `CONFIG.YML` for explanations behind the configuration options.
 
 ### Work-in-progress!!
 
@@ -24,6 +24,7 @@ For version 1.7.7_02
 - kick-reason on server /stop
 - playerdat-by-UUID + automatic legacy playerdat conversion
 - server-sided word-wrap to preserve chat colours on multi-lined messages
+- Enforce maximum stack sizes and remove illegal blocks and items from player inventories, and prevent their use and/or placement (configurable)
 
 ## Exploit patches:
 - Validate the contents of Packet134ItemData (Never trust the client!)
