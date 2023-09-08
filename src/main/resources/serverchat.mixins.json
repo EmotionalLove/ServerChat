@@ -4,18 +4,19 @@
   "package": "online.calamitycraft.serverchat.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityItemMixin",
-    "EntityPlayerMixin",
     "WorldServerMixin"
   ],
   "client": [
   ],
   "server": [
+    "EntityItemMixin",
+    "EntityPlayerMixin",
     "EntityPlayerMPMixin",
     "MinecraftServerMixin",
     "NetLoginHandlerMixin",
     "NetServerHandlerMixin",
     "SaveHandlerServerMixin",
+    "WorldMixin",
     "ServerConfigurationManagerMixin"
   ],
   "injectors": {

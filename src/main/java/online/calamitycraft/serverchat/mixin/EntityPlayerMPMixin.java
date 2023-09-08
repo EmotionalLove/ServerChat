@@ -5,11 +5,15 @@ import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.lang.I18n;
 import net.minecraft.core.net.packet.Packet;
 import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.core.world.World;
+import net.minecraft.core.world.chunk.ChunkCoordinates;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetServerHandler;
+import online.calamitycraft.serverchat.ServerChatMod;
 import online.calamitycraft.serverchat.util.DeathMessageUtil;
+import online.calamitycraft.serverchat.util.SpawnUtil;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -29,6 +33,11 @@ public class EntityPlayerMPMixin {
     @Shadow public NetServerHandler playerNetServerHandler;
 
     @Shadow public MinecraftServer mcServer;
+
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/world/World;getSpawnPoint()Lnet/minecraft/core/world/chunk/ChunkCoordinates;"))
+    private ChunkCoordinates getSpawnPoint(World instance) {
+        return SpawnUtil.findSuitableSpawnPoint(ServerChatMod.config.getSpawnX(300), ServerChatMod.config.getSpawnZ(300), instance);
+    }
 
     /**
      * @author CalamityCraft

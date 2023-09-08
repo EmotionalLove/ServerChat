@@ -1,7 +1,6 @@
 package online.calamitycraft.serverchat.util;
 
 import net.minecraft.core.block.Block;
-import net.minecraft.core.item.Item;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +18,9 @@ public class ConfigUtil {
         configMap.put("allow-joinleave-msgs", true);
         configMap.put("obscure-kick-reason", true);
         configMap.put("defer-entity-updates", false);
+        configMap.put("random-spawn", true);
+        configMap.put("spawn-radius-x", 300);
+        configMap.put("spawn-radius-z", 300);
         configMap.put("clump-radius-x", 3);
         configMap.put("clump-radius-y", 2);
         configMap.put("clump-radius-z", 3);
@@ -97,6 +99,30 @@ public class ConfigUtil {
     }
 
 
+    public int getSpawnX(int def) {
+        if (CACHE.isSpawnCached()) return CACHE.getSpawnX();
+        Object val = configMap.getOrDefault("spawn-radius-x", def);
+        if (val instanceof Number) {
+            CACHE.setSpawnX(((Number) val).intValue());
+            return ((Number) val).intValue();
+        } else {
+            CACHE.setSpawnX(def);
+            return def;
+        }
+    }
+
+    public int getSpawnZ(int def) {
+        if (CACHE.isSpawnCached()) return CACHE.getSpawnZ();
+        Object val = configMap.getOrDefault("spawn-radius-z", def);
+        if (val instanceof Number) {
+            CACHE.setSpawnZ(((Number) val).intValue());
+            return ((Number) val).intValue();
+        } else {
+            CACHE.setSpawnZ(def);
+            return def;
+        }
+    }
+
     public float getClumpX(float def) {
         if (CACHE.isClumpCached()) return CACHE.getClumpX();
         Object val = configMap.getOrDefault("clump-radius-x", def);
@@ -150,6 +176,8 @@ public class ConfigUtil {
     }
 
     public static class Cache {
+        private int spawnX = Integer.MIN_VALUE;
+        private int spawnZ = Integer.MIN_VALUE;
         private float clumpX = Float.MIN_VALUE;
         private float clumpY = Float.MIN_VALUE;
         private float clumpZ = Float.MIN_VALUE;
@@ -157,6 +185,14 @@ public class ConfigUtil {
 
         protected Cache() {
 
+        }
+
+        protected void setSpawnX(int spawnX) {
+            this.spawnX = spawnX;
+        }
+
+        protected void setSpawnZ(int spawnZ) {
+            this.spawnZ = spawnZ;
         }
 
         protected void setClumpX(float clumpX) {
@@ -169,6 +205,14 @@ public class ConfigUtil {
 
         protected void setClumpZ(float clumpZ) {
             this.clumpZ = clumpZ;
+        }
+
+        public int getSpawnX() {
+            return spawnX;
+        }
+
+        public int getSpawnZ() {
+            return spawnZ;
         }
 
         public float getClumpX() {
@@ -185,6 +229,10 @@ public class ConfigUtil {
 
         public boolean isClumpCached() {
             return getClumpX() != Float.MIN_VALUE && getClumpY() != Float.MIN_VALUE && getClumpZ() != Float.MIN_VALUE;
+        }
+
+        public boolean isSpawnCached() {
+            return getSpawnX() != Integer.MIN_VALUE && getSpawnZ() != Integer.MIN_VALUE;
         }
 
         protected void setIllegalArr(int[] illegalArr) {

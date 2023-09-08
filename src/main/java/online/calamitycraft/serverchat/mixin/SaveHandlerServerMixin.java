@@ -35,7 +35,7 @@ public abstract class SaveHandlerServerMixin extends SaveHandlerBase {
     @Overwrite
     private CompoundTag getPlayerData(String s) {
         try {
-            String uid = UuidUtil.getUUID(s);
+            String uid = UuidUtil.getUUID(s, false);
             File file = new File(new File(this.getSaveDirectory(), "players"), uid + ".dat");
             if (file.exists()) {
                 return NbtIo.readCompressed(Files.newInputStream(file.toPath()));
