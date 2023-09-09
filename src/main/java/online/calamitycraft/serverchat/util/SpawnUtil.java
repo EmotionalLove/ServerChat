@@ -42,4 +42,21 @@ public class SpawnUtil {
         }
         return -1;
     }
+    public static int findHighestSolidBlockNether(World world, int x, int z) {
+        Chunk chunk = world.getChunkFromBlockCoords(x, z);
+        x &= 0xF;
+        z &= 0xF;
+        for (int heightBlocks = world.getHeightBlocks() - 3; heightBlocks > 0; heightBlocks--) {
+            int id = chunk.getBlockID(x, heightBlocks, z);
+            if (id == 0) {
+                int idBelow = chunk.getBlockID(x, heightBlocks - 1, z);
+                if (idBelow != 0) continue;
+                int idBelowBelow = chunk.getBlockID(x, heightBlocks - 2, z);
+                if (idBelowBelow == 0) continue;
+                Material mat = Block.blocksList[idBelowBelow].blockMaterial;
+                if (mat.isSolid()) return heightBlocks - 1;
+            }
+        }
+        return -1;
+    }
 }

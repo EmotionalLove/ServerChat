@@ -19,6 +19,7 @@ public class ConfigUtil {
         configMap.put("obscure-kick-reason", true);
         configMap.put("defer-entity-updates", false);
         configMap.put("random-spawn", true);
+        configMap.put("restrict-nether-roof", true);
         configMap.put("spawn-radius-x", 300);
         configMap.put("spawn-radius-z", 300);
         configMap.put("clump-radius-x", 3);
@@ -93,6 +94,16 @@ public class ConfigUtil {
     public boolean useRandomSpawn(boolean def) {
         Object val = configMap.getOrDefault("random-spawn", def);
         if (val instanceof Boolean) return (boolean) val;
+        else return def;
+    }
+
+    public boolean restrictNetherRoof(boolean def) {
+        if (CACHE.restrictNetherRoofCached()) return CACHE.isRestrictNetherRoof();
+        Object val = configMap.getOrDefault("restrict-nether-roof", def);
+        if (val instanceof Boolean) {
+            CACHE.setRestrictNetherRoof((boolean) val);
+            return (boolean) val;
+        }
         else return def;
     }
 
@@ -181,6 +192,9 @@ public class ConfigUtil {
     }
 
     public static class Cache {
+
+        private boolean restrictNetherRoof = false;
+        private boolean cachedRestrictNetherRoof = false;
         private int spawnX = Integer.MIN_VALUE;
         private int spawnZ = Integer.MIN_VALUE;
         private float clumpX = Float.MIN_VALUE;
@@ -192,6 +206,10 @@ public class ConfigUtil {
 
         }
 
+        protected void setRestrictNetherRoof(boolean restrictNetherRoof) {
+            this.restrictNetherRoof = restrictNetherRoof;
+            this.cachedRestrictNetherRoof = true;
+        }
         protected void setSpawnX(int spawnX) {
             this.spawnX = spawnX;
         }
@@ -232,6 +250,10 @@ public class ConfigUtil {
             return clumpZ;
         }
 
+        public boolean isRestrictNetherRoof() {
+            return restrictNetherRoof;
+        }
+
         public boolean isClumpCached() {
             return getClumpX() != Float.MIN_VALUE && getClumpY() != Float.MIN_VALUE && getClumpZ() != Float.MIN_VALUE;
         }
@@ -250,6 +272,10 @@ public class ConfigUtil {
 
         public boolean isIllegalArrCached() {
             return illegalArr[0] != -1;
+        }
+
+        public boolean restrictNetherRoofCached() {
+            return cachedRestrictNetherRoof;
         }
     }
 

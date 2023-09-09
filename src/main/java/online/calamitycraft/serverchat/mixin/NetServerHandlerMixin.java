@@ -10,7 +10,9 @@ import net.minecraft.server.net.ChatEmotes;
 import net.minecraft.server.net.ServerConfigurationManager;
 import net.minecraft.server.net.handler.NetServerHandler;
 import online.calamitycraft.serverchat.ServerChatMod;
+import online.calamitycraft.serverchat.event.PlayerTryMoveEvent;
 import online.calamitycraft.serverchat.event.TryBlockPlaceEvent;
+import online.calamitycraft.serverchat.util.SpawnUtil;
 import online.calamitycraft.serverchat.util.WhisperUtil;
 import org.apache.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +38,8 @@ public abstract class NetServerHandlerMixin {
 
     @Shadow
     public abstract void kickPlayer(String s);
+
+    @Shadow public abstract void teleportTo(double d, double d1, double d2, float f, float f1);
 
     @Inject(method = "handleChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/net/ChatEmotes;process(Ljava/lang/String;)Ljava/lang/String;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD, remap = false, cancellable = true)
     private void handleChat(Packet3Chat packet, CallbackInfo ci, String s) {
@@ -103,6 +107,16 @@ public abstract class NetServerHandlerMixin {
         boolean flag = validateCompoundTag(packet.tag); // ensure the compoundtag only has the four permitted keys in it
         if (!isLabel || !flag) {
             this.kickPlayer(TextFormatting.ORANGE + "You have been disconnected from the server");
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "handleFlying", at = @At("HEAD"), cancellable = true)
+    private void handleFlying(Packet10Flying packet, CallbackInfo ci) {
+        PlayerTryMoveEvent event = new PlayerTryMoveEvent(this.playerEntity, packet);
+        ServerChatMod.getEventManager().invokeEvent(event);
+        if (event.isCancelled()) {
+            this.teleportTo(playerEntity.xd, playerEntity.yd, playerEntity.zd, playerEntity.xRot, playerEntity.yRot);
             ci.cancel();
         }
     }
