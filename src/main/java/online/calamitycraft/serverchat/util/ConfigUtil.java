@@ -37,6 +37,7 @@ public class ConfigUtil {
                         Block.bed.id,
                         Block.cropsWheat.id});
         configMap.put("sleep-percent", 50);
+        configMap.put("announcement", "");
     }
 
     public ConfigUtil() throws IOException {
@@ -111,6 +112,13 @@ public class ConfigUtil {
         Object val = configMap.getOrDefault("sleep-percent", def);
         if (val instanceof Number) {
             return ((Number) val).intValue();
+        } else return def;
+    }
+
+    public String getAnnouncement(String def) {
+        Object val = configMap.getOrDefault("announcement", def);
+        if (val instanceof String) {
+            return val.toString();
         } else return def;
     }
 

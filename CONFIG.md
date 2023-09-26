@@ -1,5 +1,5 @@
 Below is a default `chatconfig.yml` file. It will be automatically generated on first run.
-Each config option will be commented with it's function.
+Each config option will be commented with its function.
 
 ```yml
 sleep-percent: 50 # Overrides the sometimes-not-working server.properties value

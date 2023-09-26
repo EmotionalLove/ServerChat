@@ -21,6 +21,7 @@ public class WhisperUtil {
     private final static int largeCharWidth = 14;
     private final static int normalCharWidth = 12;
     private final static int smallCharWidth = 6;
+    private final static int wordLenThreshold = 10;
     public final static int maxWidth = 633;
 
     /**

@@ -63,6 +63,7 @@ public class ServerChatMod implements ModInitializer {
         if (config.restrictNetherRoof(true)) {
             getEventManager().registerListener(new RestrictNetherRoofFeature());
         }
+        getEventManager().registerListener(new AnnouncementFeature());
 
         LOGGER.info("ServerChat initialized.");
     }
